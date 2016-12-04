@@ -2,12 +2,11 @@ language: csharp
 solution: House Insight.sln
 install:
   - nuget restore House Insight.sln
-  - nuget install xunit.runners -Version 1.9.2 -OutputDirectory testrunner
 script:
   - xbuild /p:Configuration=Release House Insight.sln
-  - mono ./testrunner/xunit.runners.1.9.2/tools/xunit.console.clr4.exe ./test/Martijn.HouseInsight.EntityFramework.Tests/bin/Debug/netcoreapp1.1/Martijn.HouseInsight.EntityFramework.Tests.dll
+  - dotnet test test/Martijn.HouseInsight.EntityFramework.Tests -verbose
 matrix:
   include:
-    - dotnet: 1.0.0-preview2-003131
+    - dotnet: 1.0.0-preview3-004056
       mono: none
       env: DOTNETCORE=1
