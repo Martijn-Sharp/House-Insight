@@ -8,6 +8,6 @@ script:
   - mono ./testrunner/xunit.runners.1.9.2/tools/xunit.console.clr4.exe ./test/Martijn.HouseInsight.EntityFramework.Tests/bin/Debug/netcoreapp1.1/Martijn.HouseInsight.EntityFramework.Tests.dll
 matrix:
   include:
-    - dotnet: 1.0.0-preview2-1-003177
+    - dotnet: 1.0.0-preview2-003131
       mono: none
       env: DOTNETCORE=1
