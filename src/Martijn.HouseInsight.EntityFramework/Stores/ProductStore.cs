@@ -17,20 +17,25 @@ namespace Martijn.HouseInsight.EntityFramework.Stores
 
         public async Task AddAsync(int itemTypeId, Product product)
         {
-            var itemType = await ItemTypeStore.GetByIdAsync(itemTypeId);
+            var itemType = await ItemTypeStore.GetByIdWithProductsAsync(itemTypeId);
             itemType.Products.Add(product);
             await Context.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<Product>> GetAllByItemTypeIdAsync(int itemTypeId)
         {
-            var itemType = await Context.ItemTypes.Include(x => x.Products).SingleOrDefaultAsync(x => x.Id == itemTypeId);
+            var itemType = await ItemTypeStore.GetByIdWithProductsAsync(itemTypeId);
             return itemType.Products;
         }
-
+        
         public async Task<Product> GetByIdAsync(int id)
         {
             return await Context.Products.SingleOrDefaultAsync(x => x.Id == id);
+        }
+
+        public async Task<Product> GetByIdWithRetailsAsync(int id)
+        {
+            return await Context.Products.Include(x => x.RetailProducts).SingleOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task UpdateAsync(Product product)

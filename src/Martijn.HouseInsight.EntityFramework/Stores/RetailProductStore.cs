@@ -20,8 +20,8 @@ namespace Martijn.HouseInsight.EntityFramework.Stores
 
         public async Task AddAsync(int retailId, int productId, RetailProduct retailProduct)
         {
-            var retail = await RetailStore.GetByIdAsync(retailId);
-            var product = await ProductStore.GetByIdAsync(productId);
+            var retail = await RetailStore.GetByIdWithProductsAsync(retailId);
+            var product = await ProductStore.GetByIdWithRetailsAsync(productId);
             retail.RetailProducts.Add(retailProduct);
             product.RetailProducts.Add(retailProduct);
             await Context.SaveChangesAsync();
@@ -29,13 +29,13 @@ namespace Martijn.HouseInsight.EntityFramework.Stores
 
         public async Task<IEnumerable<RetailProduct>> GetAllByProductIdAsync(int productId)
         {
-            var product = await Context.Products.Include(x => x.RetailProducts).SingleOrDefaultAsync(x => x.Id == productId);
+            var product = await ProductStore.GetByIdWithRetailsAsync(productId);
             return product.RetailProducts;
         }
 
         public async Task<IEnumerable<RetailProduct>> GetAllByRetailIdAsync(int retailId)
         {
-            var retail = await Context.Retails.Include(x => x.RetailProducts).SingleOrDefaultAsync(x => x.Id == retailId);
+            var retail = await RetailStore.GetByIdWithProductsAsync(retailId);
             return retail.RetailProducts;
         }
 

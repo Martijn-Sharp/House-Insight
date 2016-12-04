@@ -26,6 +26,11 @@ namespace Martijn.HouseInsight.EntityFramework.Stores
             return await Context.ItemGroups.SingleOrDefaultAsync(x => x.Id == id);
         }
 
+        public async Task<ItemGroup> GetByIdWithItemTypesAsync(int id)
+        {
+            return await Context.ItemGroups.Include(x => x.ItemTypes).SingleOrDefaultAsync(x => x.Id == id);
+        }
+
         public async Task UpdateAsync(ItemGroup itemGroup)
         {
             var entry = Context.ItemGroups.Attach(itemGroup);

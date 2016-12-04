@@ -101,7 +101,7 @@ namespace Martijn.HouseInsight.EntityFramework
             builder.HasKey(x => new { StoreChainId = x.RetailId, x.ProductId });
             builder.Property(x => x.Price).HasColumnType("money").IsRequired();
             builder.Property(x => x.Link).IsRequired();
-            builder.Property(x => x.LastUpdated).HasDefaultValue("getutcdate()").IsRequired();
+            builder.Property(x => x.LastUpdated).HasDefaultValueSql("getutcdate()").IsRequired();
             builder.Property(x => x.IsDiscount).HasDefaultValue(false);
             builder.HasOne(x => x.Retail).WithMany(x => x.RetailProducts).HasForeignKey(x => x.RetailId);
             builder.HasOne(x => x.Product).WithMany(x => x.RetailProducts).HasForeignKey(x => x.ProductId);

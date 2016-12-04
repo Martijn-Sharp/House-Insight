@@ -26,6 +26,11 @@ namespace Martijn.HouseInsight.EntityFramework.Stores
             return await Context.ItemPriorities.SingleOrDefaultAsync(x => x.Id == id);
         }
 
+        public async Task<ItemPriority> GetByIdWithItemTypesAsync(int id)
+        {
+            return await Context.ItemPriorities.Include(x => x.ItemTypes).SingleOrDefaultAsync(x => x.Id == id);
+        }
+
         public async Task UpdateAsync(ItemPriority itemPriority)
         {
             var entry = Context.ItemPriorities.Attach(itemPriority);

@@ -12,6 +12,8 @@ namespace Martijn.HouseInsight.Core.Stores
 
         Task<Room> GetByIdAsync(int id);
 
+        Task<Room> GetByIdWithItemTypesAsync(int id);
+
         Task UpdateAsync(Room room);
 
         Task RemoveAsync(Room room);

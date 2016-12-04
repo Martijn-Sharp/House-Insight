@@ -9,7 +9,19 @@ namespace Martijn.HouseInsight.EntityFramework.Stores
 {
     public class ItemTypeStore : EntityFrameworkStoreBase, IItemTypeStore
     {
-        public ItemTypeStore(HouseInsightContext context) : base(context) { }
+        public ItemTypeStore(HouseInsightContext context, IItemGroupStore itemGroupStore,
+            IItemPriorityStore itemPriorityStore, IRoomStore roomStore) : base(context)
+        {
+            ItemGroupStore = itemGroupStore;
+            ItemPriorityStore = itemPriorityStore;
+            RoomStore = roomStore;
+        }
+
+        protected IItemGroupStore ItemGroupStore { get; set; }
+
+        protected IItemPriorityStore ItemPriorityStore { get; set; }
+
+        protected IRoomStore RoomStore { get; set; }
 
         public async Task AddAsync(ItemType itemType)
         {
@@ -19,29 +31,19 @@ namespace Martijn.HouseInsight.EntityFramework.Stores
 
         public async Task<IEnumerable<ItemType>> GetAllByGroupIdAsync(int groupId)
         {
-            var group = await Context.ItemGroups
-                .Include(x => x.ItemTypes)
-                .SingleOrDefaultAsync(x => x.Id == groupId);
-
+            var group = await ItemGroupStore.GetByIdWithItemTypesAsync(groupId);
             return group.ItemTypes;
         }
 
         public async Task<IEnumerable<ItemType>> GetAllByPriorityIdAsync(int priorityId)
         {
-            var priority = await Context.ItemPriorities
-                .Include(x => x.ItemTypes)
-                .SingleOrDefaultAsync(x => x.Id == priorityId);
-
+            var priority = await ItemPriorityStore.GetByIdWithItemTypesAsync(priorityId);
             return priority.ItemTypes;
         }
 
         public async Task<IEnumerable<ItemType>> GetAllByRoomIdAsync(int roomId)
         {
-            var room = await Context.Rooms
-                .Include(x => x.ItemTypes)
-                .ThenInclude(x => x.ItemType)
-                .SingleOrDefaultAsync(x => x.Id == roomId);
-
+            var room = await RoomStore.GetByIdWithItemTypesAsync(roomId);
             return room.ItemTypes.Select(x => x.ItemType);
         }
 
@@ -53,6 +55,11 @@ namespace Martijn.HouseInsight.EntityFramework.Stores
         public async Task<ItemType> GetByIdAsync(int id)
         {
             return await Context.ItemTypes.SingleOrDefaultAsync(x => x.Id == id);
+        }
+
+        public async Task<ItemType> GetByIdWithProductsAsync(int id)
+        {
+            return await Context.ItemTypes.Include(x => x.Products).SingleOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task UpdateAsync(ItemType itemType)

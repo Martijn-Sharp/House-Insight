@@ -6,7 +6,7 @@ namespace Martijn.HouseInsight.Core.Models
     {
         public int Id { get; set; }
 
-        public int Name { get; set; }
+        public string Name { get; set; }
 
         public virtual ICollection<GeoPosition> Locations { get; set; }
 

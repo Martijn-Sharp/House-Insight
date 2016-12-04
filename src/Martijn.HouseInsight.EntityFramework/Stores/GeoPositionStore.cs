@@ -18,14 +18,14 @@ namespace Martijn.HouseInsight.EntityFramework.Stores
 
         public async Task AddAsync(int retailId, GeoPosition geoPosition)
         {
-            var retail = await RetailStore.GetByIdAsync(retailId);
+            var retail = await RetailStore.GetByIdWithLocationsAsync(retailId);
             retail.Locations.Add(geoPosition);
             await Context.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<GeoPosition>> GetAllByRetailIdAsync(int retailId)
         {
-            var retail = await Context.Retails.Include(x => x.Locations).SingleOrDefaultAsync(x => x.Id == retailId);
+            var retail = await RetailStore.GetByIdWithLocationsAsync(retailId);
             return retail?.Locations ?? Enumerable.Empty<GeoPosition>();
         }
 
