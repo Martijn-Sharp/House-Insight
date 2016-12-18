@@ -26,7 +26,7 @@ namespace Martijn.HouseInsight.EntityFramework.Stores
         public async Task<IEnumerable<GeoPosition>> GetAllByRetailIdAsync(int retailId)
         {
             var retail = await RetailStore.GetByIdWithLocationsAsync(retailId);
-            return retail?.Locations ?? Enumerable.Empty<GeoPosition>();
+            return retail?.Locations;
         }
 
         public async Task<GeoPosition> GetByIdAsync(int id)
